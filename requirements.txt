@@ -1,0 +1,4 @@
+# VoiceForge itself has NO Python dependencies (standard library only).
+# The heavy engines (Applio/RVC, Demucs, Kokoro) live in their own
+# virtual environments, created by scripts/setup_engines.sh, so this
+# package never fights with their pins.

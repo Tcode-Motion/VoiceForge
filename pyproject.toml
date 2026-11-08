@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+
+name = "voiceforge"
+version = "1.3.0"
+description = "CPU-first voice cloning studio: clone any voice, make it speak or sing. No GPU, low RAM, fully offline."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+desktop = ["pywebview>=4.0"]
+authors = [{ name = "Tanmoy Majumder" }]
+keywords = ["voice-cloning", "rvc", "voice-conversion", "tts", "cpu", "offline", "demucs", "kokoro"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+
+[project.scripts]
+voiceforge = "voiceforge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
