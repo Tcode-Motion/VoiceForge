@@ -129,7 +129,8 @@ class MainActivity : Activity() {
             var url = urlBox.text.toString().trim()
             if (url.isEmpty()) return@setOnClickListener
             if (!url.startsWith("http")) url = "http://$url"
-            if (!url.contains(":", startIndex = 7)) url = "$url:8760"
+            val rest = if (url.startsWith("https://")) url.removePrefix("https://") else url.removePrefix("http://")
+            if (!rest.contains(":")) url = "$url:8760"
             prefs.edit().putString("url", url).apply()
             web.loadUrl(url)
         }
