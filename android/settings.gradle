@@ -1,0 +1,2 @@
+rootProject.name = "VoiceForge"
+include ":app"

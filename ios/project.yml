@@ -1,0 +1,21 @@
+name: VoiceForge
+options:
+  bundleIdPrefix: dev.voiceforge
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  VoiceForge:
+    type: application
+    platform: iOS
+    sources:
+      - VoiceForge
+    settings:
+      INFOPLIST_KEY_UILaunchStoryboardName: ""
+      PRODUCT_BUNDLE_IDENTIFIER: dev.voiceforge.app
+      MARKETING_VERSION: "1.2.1"
+      CURRENT_PROJECT_VERSION: "1"
+    info:
+      properties:
+        UILaunchScreen: {}
+        NSMicrophoneUsageDescription: "VoiceForge uses the microphone so you can record voice samples."
+        NSLocalNetworkUsageDescription: "VoiceForge connects to the studio running on your computer on your local network."

@@ -1,0 +1,25 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Byte-compile the package
+        run: python -m compileall -q src
+      - name: Import check (stdlib only)
+        run: PYTHONPATH=src python -c "import voiceforge.cli, voiceforge.tui, voiceforge.webgui, voiceforge.train, voiceforge.convert, voiceforge.sing, voiceforge.speak"
+      - name: CLI smoke test
+        run: |
+          PYTHONPATH=src python -m voiceforge --help
+          PYTHONPATH=src python -m voiceforge voices
+      - name: Web GUI renders
+        run: PYTHONPATH=src python -c "from voiceforge.webgui import _render_page; h=_render_page().decode(); assert 'Train voice' in h and 'dztext' in h"
+      - name: Docs hygiene (no em dashes)
+        run: "! grep -rn '—' README.md docs/ src/ || (echo 'em dash found' && exit 1)"

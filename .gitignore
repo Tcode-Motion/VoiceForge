@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+~/.voiceforge/
+models/*.pth
+models/*.index
+work/
+*.wav
+!examples/*.wav
+dist/
+build/
+*.egg-info/
