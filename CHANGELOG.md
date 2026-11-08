@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0.1 (2026-11-08)
+
+- Fixed GitHub Release CI workflow:
+  - macOS desktop build: bundled Pillow dependency and native `.icns` asset so PyInstaller icon conversion succeeds on macOS.
+  - Windows desktop build: bundled native `.ico` icon and set matrix `fail-fast: false` to ensure builds continue independently.
+  - Android APK build: upgraded to `android-actions/setup-android@v4` with clean `platform-tools` and `build-tools;34.0.0` packages to avoid the deprecated `tools` package error.
+  - iOS companion build: added missing `info.path: VoiceForge/Info.plist` and explicit `VoiceForge/Info.plist` to prevent XcodeGen decoding failures.
+  - Cross-platform release packaging: automatically publishes Windows (.zip), macOS (.zip), Linux (.tar.gz), Android APK, iOS simulator (.zip), and Python distribution wheel/sdist packages.
+- Platform Setup & Engine installation scripts:
+  - Added native Windows PowerShell script (`scripts/setup_engines.ps1`) and Command Prompt batch script (`scripts/setup_engines.bat`).
+  - Updated engine path resolution in `src/voiceforge/config.py` to support Windows paths (`Scripts/python.exe`) as well as POSIX paths (`bin/python`).
+- Expanded README and documentation:
+  - Detailed cross-platform setup instructions for Windows, macOS, Linux, Android, iOS, and Web/Docker.
+  - Comprehensive CLI usage examples, engine architecture, benchmarks, and troubleshooting steps.
+
+
 ## 1.3.0
 
 - Desktop app rebuilt: it now opens the web studio itself inside a

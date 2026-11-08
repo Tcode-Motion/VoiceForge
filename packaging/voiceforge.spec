@@ -1,5 +1,6 @@
 # PyInstaller spec for the VoiceForge desktop app.
 # Build: pyinstaller packaging/voiceforge.spec (from the repo root)
+import sys
 from pathlib import Path
 
 root = Path(SPECPATH).parent
@@ -12,6 +13,21 @@ try:
     wv_datas, wv_binaries, wv_hidden = collect_all("webview")
 except Exception:
     wv_datas, wv_binaries, wv_hidden = [], [], []
+
+icon_png = root / "assets" / "logo.png"
+icon_ico = root / "assets" / "logo.ico"
+icon_icns = root / "assets" / "logo.icns"
+
+exe_icon = None
+bundle_icon = None
+
+if sys.platform.startswith("win"):
+    exe_icon = str(icon_ico) if icon_ico.exists() else (str(icon_png) if icon_png.exists() else None)
+elif sys.platform.startswith("darwin"):
+    bundle_icon = str(icon_icns) if icon_icns.exists() else (str(icon_png) if icon_png.exists() else None)
+    exe_icon = bundle_icon
+else:
+    exe_icon = str(icon_png) if icon_png.exists() else None
 
 a = Analysis(
     [str(root / "packaging" / "launcher.py")],
@@ -38,11 +54,11 @@ exe = EXE(
     strip=False,
     upx=False,
     console=False,
-    icon=str(root / "assets" / "logo.png"),
+    icon=exe_icon,
 )
 app = BUNDLE(
     exe,
     name="VoiceForge.app",
-    icon=str(root / "assets" / "logo.png"),
+    icon=bundle_icon,
     bundle_identifier="dev.voiceforge.app",
 )

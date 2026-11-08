@@ -200,7 +200,7 @@ section,.console{padding-left:18px;padding-right:18px;max-width:100%}
   <div class="sidefoot">
     <div class="enginecard"><div class="t"><span class="dotok"></span>Local engine ready</div>
     <div class="s">Runs fully offline on CPU. Your voice never leaves this computer.</div></div>
-    <div class="version">VoiceForge v1.3.0</div>
+    <div class="version">VoiceForge v1.0.0.1</div>
   </div>
 </aside>
 <main>

@@ -1,15 +1,40 @@
-# Packaging
+# Packaging VoiceForge Desktop
 
-Desktop apps are built with PyInstaller from
-`packaging/voiceforge.spec` and the entry point
-`packaging/launcher.py` (desktop GUI, web GUI fallback).
+VoiceForge Desktop bundles the entire studio (HTML/JS frontend, audio pipeline, and Python runtime) into a standalone native desktop application for Windows, macOS, and Linux.
 
-Local build:
+The packaging engine uses PyInstaller with `packaging/voiceforge.spec` and entry point `packaging/launcher.py`. When `pywebview` is present, it renders in an embedded native window; otherwise it falls back smoothly to your default web browser.
 
+---
+
+## Local Build Instructions
+
+### Prerequisites
+Install packaging dependencies:
 ```bash
-pip install pyinstaller
-pyinstaller packaging/voiceforge.spec --noconfirm
+pip install pyinstaller pywebview pillow
 ```
 
-CI builds Windows, macOS and Linux on every release branch push and
-attaches the packaged apps to the GitHub release automatically.
+### Build Commands
+
+#### Windows:
+```powershell
+pyinstaller packaging\voiceforge.spec --noconfirm
+Compress-Archive -Path dist\VoiceForge.exe -DestinationPath VoiceForge-Windows.zip
+```
+
+#### macOS:
+```bash
+pyinstaller packaging/voiceforge.spec --noconfirm
+cd dist && zip -qr ../VoiceForge-macOS.zip VoiceForge.app
+```
+
+#### Linux:
+```bash
+pyinstaller packaging/voiceforge.spec --noconfirm
+cd dist && tar -czf ../VoiceForge-Linux.tar.gz VoiceForge
+```
+
+---
+
+## Automated CI/CD Builds
+GitHub Actions automatically builds desktop binaries for Windows, macOS, and Linux on every release branch or tag push, and attaches them directly to the GitHub Release.

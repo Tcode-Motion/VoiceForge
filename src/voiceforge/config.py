@@ -58,7 +58,14 @@ def svc_python() -> str:
     env = os.environ.get("VF_SVC_PYTHON")
     if env:
         return env
-    return str(ENGINES_DIR / "svc-venv" / "bin" / "python")
+    for cand in [
+        ENGINES_DIR / "svc-venv" / "Scripts" / "python.exe",
+        ENGINES_DIR / "svc-venv" / "bin" / "python",
+        ENGINES_DIR / "svc-venv" / "python.exe",
+    ]:
+        if cand.exists():
+            return str(cand)
+    return str(ENGINES_DIR / "svc-venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python"))
 
 
 def tts_python() -> str:
@@ -66,8 +73,14 @@ def tts_python() -> str:
     env = os.environ.get("VF_TTS_PYTHON")
     if env:
         return env
-    cand = ENGINES_DIR / "tts-venv" / "bin" / "python"
-    return str(cand) if cand.exists() else svc_python()
+    for cand in [
+        ENGINES_DIR / "tts-venv" / "Scripts" / "python.exe",
+        ENGINES_DIR / "tts-venv" / "bin" / "python",
+        ENGINES_DIR / "tts-venv" / "python.exe",
+    ]:
+        if cand.exists():
+            return str(cand)
+    return svc_python()
 
 
 def offline_env() -> dict:

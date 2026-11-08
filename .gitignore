@@ -10,3 +10,5 @@ work/
 dist/
 build/
 *.egg-info/
+.gradle/
+.vscode/

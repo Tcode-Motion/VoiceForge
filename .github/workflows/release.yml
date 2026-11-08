@@ -1,8 +1,9 @@
 name: Release apps
-# Runs when a release branch is pushed (release/vX.Y.Z) or manually.
+# Runs when a release branch is pushed (release/vX.Y.Z), tag (v*), or manually.
 on:
   push:
     branches: ["release/**"]
+    tags: ["v*"]
   workflow_dispatch:
 permissions:
   contents: write
@@ -11,6 +12,7 @@ jobs:
     name: Desktop (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
@@ -18,8 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install PyInstaller
-        run: pip install pyinstaller pywebview
+      - name: Install PyInstaller and dependencies
+        run: pip install pyinstaller pywebview pillow
       - name: Build app
         run: pyinstaller packaging/voiceforge.spec --noconfirm
       - name: Package (Windows)
@@ -48,17 +50,21 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools build-tools;34.0.0'
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.7"
       - name: Build debug APK
         working-directory: android
         run: gradle assembleDebug --no-daemon
+      - name: Stage Android APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk VoiceForge-Android.apk
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: VoiceForge-Android.apk
   ios:
     name: iOS app (unsigned, simulator)
     runs-on: macos-latest
@@ -83,8 +89,16 @@ jobs:
     name: Publish GitHub release
     needs: [desktop, android, ios]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/heads/release/')
+    if: startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/tags/v')
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build Python packages
+        run: |
+          pip install build
+          python -m build
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
@@ -92,10 +106,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="${GITHUB_REF_NAME#release/}"
+          RAW_REF="${GITHUB_REF_NAME}"
+          VERSION="${RAW_REF#release/}"
+          VERSION="${VERSION#refs/tags/}"
           mkdir -p out
           find artifacts -type f \( -name "*.zip" -o -name "*.tar.gz" -o -name "*.apk" \) -exec cp {} out/ \;
+          cp dist/*.whl dist/*.tar.gz out/ 2>/dev/null || true
           gh release create "$VERSION" out/* \
             --repo "$GITHUB_REPOSITORY" \
             --title "VoiceForge $VERSION" \
-            --notes "First packaged release. Desktop apps for Windows, macOS and Linux; Android APK; iOS simulator build (unsigned, needs an Apple Developer account for devices). The studio package itself is in this repository: pip install . after bash scripts/setup_engines.sh"
+            --notes "VoiceForge $VERSION complete packaged release. Desktop apps for Windows, macOS and Linux; Android APK; iOS simulator build (unsigned); and Python wheel and source distribution. Everything runs CPU-only, low-RAM, and 100% offline." || gh release upload "$VERSION" out/* --repo "$GITHUB_REPOSITORY" --clobber
