@@ -80,7 +80,7 @@ jobs:
             -sdk iphonesimulator -configuration Release \
             -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
           cd build/Build/Products/Release-iphonesimulator
-          zip -qr ../../../../VoiceForge-iOS-simulator.zip VoiceForge.app
+          zip -qr "$GITHUB_WORKSPACE/VoiceForge-iOS-simulator.zip" VoiceForge.app
       - uses: actions/upload-artifact@v4
         with:
           name: ios-app
