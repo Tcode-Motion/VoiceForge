@@ -17,39 +17,43 @@
 ## About
 
 VoiceForge is a voice cloning studio built for ordinary machines: a
-laptop or mini PC with a plain CPU and as little as 4 GB of RAM. Record
-a short sample of a voice, train a model locally, then make that voice
-speak typed text or sing any song. Everything runs on your own
-computer. Nothing is uploaded anywhere, ever. VoiceForge was designed,
-tested and benchmarked on a 4 vCPU / 8 GB RAM / no-GPU machine, and
-every design decision follows from that constraint.
+laptop or mini PC with a plain CPU and as little as 4 GB of RAM.
 
-## Features
+Record a short sample of a voice. Train a model on your own computer.
+Then make that voice speak typed text or sing any song. Everything
+runs locally. Nothing is uploaded anywhere, ever.
 
-- **Train a voice** from recordings: 30 seconds minimum, 5 minutes
-  recommended, 10 minutes ideal. Drag, drop, done.
-- **Sing mode**: give it any song, it separates the singing from the
-  music, converts the singing into your trained voice, and can mix it
-  back over the original music.
-- **Speak mode**: type lyrics, a message, anything, and hear it spoken
-  in the trained voice.
-- **Convert mode**: turn any voice recording into the trained voice,
-  with sliders for voice strength and clarity.
-- **Separate mode**: split any song into clean vocals and instrumental.
-- Four interfaces: a **web GUI**, a **desktop GUI**, a **terminal menu
-  (TUI)**, and a scriptable **CLI**.
-- Packaged apps are built by CI: **Windows (.exe)**, **macOS (.app)**,
-  **Linux (binary)**, plus **Android** and **iOS** companion apps that
-  run the studio UI and talk to the engine on your computer.
+VoiceForge was designed, tested and benchmarked on a small 4 vCPU /
+8 GB RAM / no-GPU machine, and every design decision follows from
+that constraint. If it runs well there, it runs well anywhere.
 
-## Screenshots
+## What you can do
 
-<p align="center">
-  <img src="assets/gui-web.png" width="430" alt="VoiceForge web GUI">
-  <img src="assets/gui-desktop.png" width="430" alt="VoiceForge desktop GUI">
-</p>
+| Mode | What it does |
+|---|---|
+| Train | Learn a voice from your recordings: 30 seconds minimum, 5 minutes recommended, 10 minutes ideal |
+| Sing | Give it any song. It separates the singing, converts it into your trained voice, and can mix it back over the original music |
+| Speak | Type any text and hear it spoken in the trained voice |
+| Convert | Turn any voice recording into the trained voice, with sliders for voice strength and clarity |
+| Separate | Split any song into clean vocals and instrumental |
 
-<p align="center"><i>The web GUI (left) and the desktop GUI (right). Same engine, same jobs, plus Convert, Separate and a voice library.</i></p>
+Four interfaces, one engine: a **web GUI**, a **desktop GUI**, a
+**terminal menu (TUI)** and a scriptable **CLI**.
+
+## Get the apps
+
+Packaged builds are produced by CI and attached to each GitHub
+release:
+
+- **Windows**: VoiceForge-Windows.zip (desktop app, .exe inside)
+- **macOS**: VoiceForge-macOS.zip (.app inside)
+- **Linux**: VoiceForge-Linux.tar.gz
+- **Android**: companion app (APK built by CI). It runs the studio
+  interface on your phone and connects to the engine on your computer
+- **iOS**: companion app (simulator build in CI; a device build needs
+  your own Apple Developer signing)
+
+Or run it from source with the quick start below.
 
 ## Quick start
 
@@ -57,7 +61,7 @@ every design decision follows from that constraint.
 # 1. Install the engines (one time; Applio/RVC, Demucs, Kokoro, all CPU builds)
 bash scripts/setup_engines.sh
 
-# 2. Install VoiceForge itself (standard library only, no dependencies)
+# 2. Install VoiceForge itself (Python standard library only, no dependencies)
 pip install .
 
 # 3. Make a voice
